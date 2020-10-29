@@ -1,5 +1,5 @@
 /*
- * CRITTERS Critter2.java
+ * CRITTERS Critter1.java
  * EE422C Project 4 submission by
  * Replace <...> with your actual data.
  * Nik Srinivas
@@ -13,25 +13,26 @@
  */
 
 
-package assignment4;
+package assignment5;
 
-public class Critter2 extends Critter{
-    // Critter1 runs unless direction = 0, then it walks
+public class Critter1 extends Critter{
+    // Critter1 reproduces unless direction = 2, then it runs
     @Override
     public void doTimeStep() {
         int dir = getRandomInt(8);
-        if (dir == 0) walk(dir);
-        else run(dir);
+        if (dir == 2) {run(dir);}
+        else {reproduce(this,dir);};
     }
 
-    // only fights if energy is greater than 5
+    // only fights Critter4
     @Override
     public boolean fight(String oponent) {
-        if (getEnergy() > 5) return true;
+        if (oponent.equals("4")) return true;
+
         return false;
     }
 
     public String toString() {
-        return "2";
+        return "1";
     }
 }

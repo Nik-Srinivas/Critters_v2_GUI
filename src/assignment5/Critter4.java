@@ -1,5 +1,5 @@
 /*
- * CRITTERS Critter3.java
+ * CRITTERS Critter4.java
  * EE422C Project 4 submission by
  * Replace <...> with your actual data.
  * Nik Srinivas
@@ -13,31 +13,31 @@
  */
 
 
-package assignment4;
+package assignment5;
 
-public class Critter3 extends Critter{
+public class Critter4 extends Critter{
+    public boolean fought = true;
 
-    public boolean walk = false;
-    // Critter3 does intervals of walking and running
+    // Critter4 walk if energe < 10, reproduces if energy between 10 - 15, and runs otherwise
     @Override
     public void doTimeStep() {
         int dir = getRandomInt(8);
-
-        if (walk) {
-            walk(dir);
-            walk = false;
-        }
+        if (getEnergy() < 10) walk(dir);
+        else if (getEnergy() > 10 && getEnergy() < 15) reproduce(this,dir);
         else run(dir);
     }
 
     // only fights Critter4
     @Override
     public boolean fight(String oponent) {
-        if (getEnergy() > 20 && oponent.equals("2")) return true;
+        if (oponent.equals("3") && !fought) {
+            fought = true;
+            return true;
+        }
         return false;
     }
 
     public String toString() {
-        return "3";
+        return "4";
     }
 }
