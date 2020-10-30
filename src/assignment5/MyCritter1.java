@@ -10,6 +10,11 @@ import java.util.List;
 public class MyCritter1 extends TestCritter {
 
     @Override
+    public CritterShape viewShape() {
+        return null;
+    }
+
+    @Override
     public void doTimeStep() {
         walk(0);
     }

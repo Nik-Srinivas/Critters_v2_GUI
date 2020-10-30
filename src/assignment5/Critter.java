@@ -62,18 +62,29 @@ public abstract class Critter {
     public abstract CritterShape viewShape();
 
     protected final String look(int direction, boolean steps) {
-        return "";
-    }
+        energy -= Params.LOOK_ENERGY_COST;
+        int[] lookLocation = move(direction, x_coord, y_coord);
+        if (steps){
+            lookLocation = move(direction, lookLocation[0], lookLocation[1]);
+        }
+        Critter hiddenCrit = findCritter(lookLocation[0],lookLocation[1]);
 
-    public static String runStats(List<Critter> critters) {
-        // TODO Implement this method
+        if (hiddenCrit != null){
+            return (hiddenCrit.toString());
+        }
+
         return null;
     }
 
-
-    public static void displayWorld(Object pane) {
-        // TODO Implement this method
-    }
+//    public static String runStats(List<Critter> critters) {
+//        // TODO Implement this method
+//        return null;
+//    }
+//
+//
+//    public static void displayWorld(Object pane) {
+//        // TODO Implement this method
+//    }
 
 	/* END --- NEW FOR PROJECT 5
 			rest is unchanged from Project 4 */
@@ -321,7 +332,7 @@ public abstract class Critter {
      *
      * @param critters List of Critters.
      */
-    public static void runStats(List<Critter> critters) {
+    public static String runStats(List<Critter> critters) {
         System.out.print("" + critters.size() + " critters as follows -- ");
         Map<String, Integer> critter_count = new HashMap<String, Integer>();
         for (Critter crit : critters) {
@@ -335,6 +346,7 @@ public abstract class Critter {
             prefix = ", ";
         }
         System.out.println();
+        return null;
     }
 
     /**
@@ -362,12 +374,12 @@ public abstract class Critter {
      * @param x,y,direction
      * @return True/False
      */
-    private boolean findCritter(int x, int y) {
+    private Critter findCritter(int x, int y) {
         for(Critter crit : population) {
             if(crit.x_coord == x && crit.y_coord == y && crit.energy > 0)
-                return true;
+                return crit;
         }
-        return false;
+        return null;
     }
 
     /**
@@ -379,7 +391,7 @@ public abstract class Critter {
         // TODO: Complete this method
         if (moveFlag == false){
             int[] potentialLocation = move(direction, x_coord, y_coord);
-            if (!(findCritter(potentialLocation[0], potentialLocation[1]) && conflictPhase)) {
+            if (!(findCritter(potentialLocation[0], potentialLocation[1]) != null && conflictPhase)) {
                 x_coord = potentialLocation[0];
                 y_coord = potentialLocation[1];
             }
@@ -398,7 +410,7 @@ public abstract class Critter {
         if (moveFlag == false){
             int[] potentialLocation = move(direction, x_coord, y_coord);
             potentialLocation = move(direction, potentialLocation[0], potentialLocation[1]);
-            if (!(findCritter(potentialLocation[0], potentialLocation[1]) && conflictPhase)) {
+            if (!(findCritter(potentialLocation[0], potentialLocation[1]) != null && conflictPhase)) {
                 x_coord = potentialLocation[0];
                 y_coord = potentialLocation[1];
             }

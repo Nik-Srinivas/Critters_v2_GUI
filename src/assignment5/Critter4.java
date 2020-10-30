@@ -18,6 +18,11 @@ package assignment5;
 public class Critter4 extends Critter{
     public boolean fought = true;
 
+    @Override
+    public CritterShape viewShape() {
+        return null;
+    }
+
     // Critter4 walk if energe < 10, reproduces if energy between 10 - 15, and runs otherwise
     @Override
     public void doTimeStep() {

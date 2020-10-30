@@ -16,6 +16,11 @@
 package assignment5;
 
 public class Critter1 extends Critter{
+    @Override
+    public CritterShape viewShape() {
+        return null;
+    }
+
     // Critter1 reproduces unless direction = 2, then it runs
     @Override
     public void doTimeStep() {

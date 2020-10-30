@@ -18,6 +18,12 @@ package assignment5;
 public class Critter3 extends Critter{
 
     public boolean walk = false;
+
+    @Override
+    public CritterShape viewShape() {
+        return null;
+    }
+
     // Critter3 does intervals of walking and running
     @Override
     public void doTimeStep() {

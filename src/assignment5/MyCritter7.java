@@ -8,6 +8,11 @@ import assignment5.Critter.TestCritter;
 public class MyCritter7 extends TestCritter {
 
     @Override
+    public CritterShape viewShape() {
+        return null;
+    }
+
+    @Override
     public void doTimeStep() {
     }
 
