@@ -101,7 +101,7 @@ public class Main extends Application {
 
         return root;
     }
-
+     // tile object
     private class Square extends StackPane {
         private int x, y;
         private Color[] colorArray = {Color.BLACK, Color.LIGHTBLUE, Color.LIGHTBLUE, Color.GREEN, Color.RED,Color.SALMON};
