@@ -14,33 +14,45 @@
 
 package assignment5;
 
-import javafx.application.Application;
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import javafx.scene.paint.Color;
+
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Scanner;
+
+
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+
 
 /*
  * Usage: java <pkg name>.Main <input file> test input file is
@@ -62,8 +74,15 @@ public class Main extends Application {
 
     private String[] classNames = new String[100];
     private int numberOfFiles = 0;
+    private int numberOfCritters = 0;
+    private String[] critterNames;
 
     public static int sceneScale = 50;
+
+    private static String myPackage;
+    static {
+        myPackage = Main.class.getPackage().toString().split(" ")[1];
+    }
 
     private Parent createGrid() {
         Pane root = new Pane();
@@ -94,6 +113,8 @@ public class Main extends Application {
             this.y = y;
 
             border.setStroke(Color.WHITE);
+
+            // TODO RANDOMIZE COLOR ON NEW GAME START
             border.setFill(Color.LIGHTGRAY);
 
             text.setFont(Font.font(18));
@@ -106,13 +127,6 @@ public class Main extends Application {
         }
     }
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        scene = new Scene(createGrid());
-
-        stage.setScene(scene);
-        stage.show();
-    }
 
     public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
@@ -127,26 +141,19 @@ public class Main extends Application {
     }
 
     public class SecondStage extends Stage {
-        Rectangle2D primaryScreenBounds2 = Screen.getPrimary().getVisualBounds();
-        Label x = new Label("Second stage");
-        VBox y = new VBox();
 
         SecondStage(){
-            this.setX(primaryScreenBounds2.getMaxX()/2);
-            this.setY(primaryScreenBounds2.getMinY());
-            this.setWidth(primaryScreenBounds2.getWidth()/2);
-            this.setHeight(primaryScreenBounds2.getHeight());
-            y.getChildren().add(x);
-            this.setTitle("World");
-            Scene scene = new Scene(grid, Params.WORLD_WIDTH * sceneScale, Params.WORLD_HEIGHT * sceneScale);
-            scene.setFill(javafx.scene.paint.Color.ANTIQUEWHITE);
+            scene = new Scene(createGrid());
+
             this.setScene(scene);
             this.show();
         }
     }
+
     //Jonah
     @Override
-    public void start(Stage primaryStage) throws ClassNotFoundException {
+    public void start(Stage primaryStage)  {
+
 
         //Initial creation of most major controls and layouts
         new SecondStage();
@@ -212,7 +219,7 @@ public class Main extends Application {
         listOfCritters.setValue(critterNames[0]);
 
         // Create Stats window
-        ThirdStage statistics = new ThirdStage();
+        //ThirdStage statistics = new ThirdStage();
 
         // TextFields for integer input (make and step)
         TextField number_critters = new TextField();
@@ -221,102 +228,102 @@ public class Main extends Application {
         step_number.setPromptText("Number of steps...");
         TextField seed_number = new TextField();
         seed_number.setPromptText("Seed value...");
-
-        // Button Action Handling
-        grid.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                sceneScale = (int)grid_scale.getValue();
-                Critter.displayWorld();
-            }
-        } ) ;
-        show.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Critter.displayWorld();
-
-            }
-        } ) ;
-        make.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                String critterType = listOfCritters.getValue();
-                try {
-                    int val = Integer.parseInt(number_critters.getText());
-                    if (val < 0) {
-                        make_error.setText("Please enter a positive integer!");
-                    }
-                    else {
-                        for (int i = 0; i < val; i += 1) {
-                            Critter.makeCritter(critterType);
-                        }
-                        make_error.setText("");
-                        Critter.displayWorld();
-                    }
-                } catch (InvalidCritterException e1) {
-
-                } catch (NumberFormatException e1) {
-                    make_error.setText("Please enter a positive integer!");
-                }
-                statistics.refreshStats();
-                Critter.displayWorld();
-            }
-        });
-        step.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    int val = Integer.parseInt(step_number.getText());
-                    if (val < 0) {
-                        step_error.setText("Please enter a positive integer!");
-                    }
-                    else {
-                        for (int i = 0; i < val; i += 1){
-                            Critter.worldTimeStep();
-                            Critter.displayWorld();
-                        }
-                        statistics.refreshStats();
-                        step_error.setText("");
-                        Critter.displayWorld();
-                    }
-                } catch (NumberFormatException e1) {
-                    step_error.setText("Please enter a positive integer!");
-                }
-            }
-        });
-        seed.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-
-                    long val = Long.parseLong(seed_number.getText(), 10);
-                    if (val < 0) {
-                        seed_error.setText("Please enter a positive integer!");
-                    }
-                    else {
-                        seed_error.setText("");
-                        Critter.setSeed(val);
-                        statistics.refreshStats();
-                        Critter.displayWorld();
-                    }
-                } catch (NumberFormatException e1) {
-                    seed_error.setText("Please enter a positive integer!");
-                }
-            }
-        });
+//
+//        // Button Action Handling
+//        grid.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                sceneScale = (int)grid_scale.getValue();
+//                Critter.displayWorld();
+//            }
+//        } ) ;
+//        show.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                Critter.displayWorld();
+//
+//            }
+//        } ) ;
+//        make.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                String critterType = listOfCritters.getValue();
+//                try {
+//                    int val = Integer.parseInt(number_critters.getText());
+//                    if (val < 0) {
+//                        make_error.setText("Please enter a positive integer!");
+//                    }
+//                    else {
+//                        for (int i = 0; i < val; i += 1) {
+//                            Critter.makeCritter(critterType);
+//                        }
+//                        make_error.setText("");
+//                        Critter.displayWorld();
+//                    }
+//                } catch (InvalidCritterException e1) {
+//
+//                } catch (NumberFormatException e1) {
+//                    make_error.setText("Please enter a positive integer!");
+//                }
+//                statistics.refreshStats();
+//                Critter.displayWorld();
+//            }
+//        });
+//        step.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                try {
+//                    int val = Integer.parseInt(step_number.getText());
+//                    if (val < 0) {
+//                        step_error.setText("Please enter a positive integer!");
+//                    }
+//                    else {
+//                        for (int i = 0; i < val; i += 1){
+//                            Critter.worldTimeStep();
+//                            Critter.displayWorld();
+//                        }
+//                        statistics.refreshStats();
+//                        step_error.setText("");
+//                        Critter.displayWorld();
+//                    }
+//                } catch (NumberFormatException e1) {
+//                    step_error.setText("Please enter a positive integer!");
+//                }
+//            }
+//        });
+//        seed.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                try {
+//
+//                    long val = Long.parseLong(seed_number.getText(), 10);
+//                    if (val < 0) {
+//                        seed_error.setText("Please enter a positive integer!");
+//                    }
+//                    else {
+//                        seed_error.setText("");
+//                        Critter.setSeed(val);
+//                        statistics.refreshStats();
+//                        Critter.displayWorld();
+//                    }
+//                } catch (NumberFormatException e1) {
+//                    seed_error.setText("Please enter a positive integer!");
+//                }
+//            }
+//        });
         quit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 System.exit(1);
             }
         });
-        animate.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Animate.animate(3);
-
-            }
-        });
+//        animate.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                Animate.animate(3);
+//
+//            }
+//        });
 
         // Find size of screen and set window sizes
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
