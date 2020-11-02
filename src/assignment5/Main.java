@@ -61,12 +61,18 @@ import javafx.scene.text.Font;
  */
 
 public class Main extends Application {
+    private static String myPackage;
+    static {
+        myPackage = Main.class.getPackage().toString().split(" ")[1];
+    }
+
+    public static int sceneScale = 50;
     private static final int TILE_SIZE = 40;
     private static final int W = Params.WORLD_WIDTH * 40;
     private static final int H = Params.WORLD_HEIGHT * 40;
-
     private static final int X_TILES = W / TILE_SIZE;
     private static final int Y_TILES = H / TILE_SIZE;
+    private static final int numColors = 6;
     public static ByteArrayOutputStream testOutputString;
 
     private Square[][] grid = new Square[X_TILES][Y_TILES];
@@ -77,20 +83,15 @@ public class Main extends Application {
     private int numberOfCritters = 0;
     private String[] critterNames;
 
-    public static int sceneScale = 50;
-
-    private static String myPackage;
-    static {
-        myPackage = Main.class.getPackage().toString().split(" ")[1];
-    }
-
     private Parent createGrid() {
         Pane root = new Pane();
         root.setPrefSize(W, H);
 
+        int colorIndex = (int)(Math.random() * numColors);
+
         for (int y = 0; y < Y_TILES; y++) {
             for (int x = 0; x < X_TILES; x++) {
-                Square tile = new Square(x, y);
+                Square tile = new Square(x, y, colorIndex);
 
                 grid[x][y] = tile;
                 root.getChildren().add(tile);
@@ -103,24 +104,17 @@ public class Main extends Application {
 
     private class Square extends StackPane {
         private int x, y;
-        private boolean isOpen = false;
-
+        private Color[] colorArray = {Color.BLACK, Color.LIGHTBLUE, Color.LIGHTBLUE, Color.GREEN, Color.RED,Color.SALMON};
         private Rectangle border = new Rectangle(TILE_SIZE - 2, TILE_SIZE - 2);
-        private Text text = new Text();
 
-        public Square(int x, int y) {
+        public Square(int x, int y, int color) {
             this.x = x;
             this.y = y;
 
             border.setStroke(Color.WHITE);
+            border.setFill(colorArray[color]);
 
-            // TODO RANDOMIZE COLOR ON NEW GAME START
-            border.setFill(Color.LIGHTGRAY);
-
-            text.setFont(Font.font(18));
-            text.setVisible(false);
-
-            getChildren().addAll(border, text);
+            getChildren().addAll(border);
 
             setTranslateX(x * TILE_SIZE);
             setTranslateY(y * TILE_SIZE);
@@ -156,7 +150,9 @@ public class Main extends Application {
 
 
         //Initial creation of most major controls and layouts
-        new SecondStage();
+        Stage worldStage = new SecondStage();
+        worldStage.setTitle("World of Critters");
+
         BorderPane borders = new BorderPane();
         HBox top = new HBox();
         HBox bottom = new HBox();
