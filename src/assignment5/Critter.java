@@ -76,11 +76,27 @@ public abstract class Critter {
         return null;
     }
 
-//    public static String runStats(List<Critter> critters) {
-//        // TODO Implement this method
-//        return null;
-//    }
-//
+    /**
+     * Prints out how many Critters of each type there are on the
+     * board.
+     *
+     * @param critters List of Critters.
+     */
+    public static String runStats(List<Critter> critters) {
+        String stats = ("" + critters.size() + " critters as follows -- ");
+        Map<String, Integer> critter_count = new HashMap<String, Integer>();
+        for (Critter crit : critters) {
+            String crit_string = crit.toString();
+            critter_count.put(crit_string,
+                    critter_count.getOrDefault(crit_string, 0) + 1);
+        }
+        String prefix = "";
+        for (String s : critter_count.keySet()) {
+            stats = (prefix + s + ":" + critter_count.get(s));
+            prefix = ", ";
+        }
+        return stats;
+    }
 //
 //    public static void displayWorld(Object pane) {
 //        // TODO Implement this method
@@ -326,28 +342,6 @@ public abstract class Critter {
         }
     }
 
-    /**
-     * Prints out how many Critters of each type there are on the
-     * board.
-     *
-     * @param critters List of Critters.
-     */
-    public static String runStats(List<Critter> critters) {
-        System.out.print("" + critters.size() + " critters as follows -- ");
-        Map<String, Integer> critter_count = new HashMap<String, Integer>();
-        for (Critter crit : critters) {
-            String crit_string = crit.toString();
-            critter_count.put(crit_string,
-                    critter_count.getOrDefault(crit_string, 0) + 1);
-        }
-        String prefix = "";
-        for (String s : critter_count.keySet()) {
-            System.out.print(prefix + s + ":" + critter_count.get(s));
-            prefix = ", ";
-        }
-        System.out.println();
-        return null;
-    }
 
     /**
      * One in-game move, depends on specific critter subclass
