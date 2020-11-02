@@ -18,17 +18,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 // JavaFX Packages for Displaying World
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
+import javafx.scene.paint.*;
+import javafx.scene.shape.*;
 
 /* 
  * See the PDF for descriptions of the methods and fields in this
@@ -40,7 +38,6 @@ import javafx.stage.Stage;
 
 public abstract class Critter {
 
-    /* START --- NEW FOR PROJECT 5 */
     public enum CritterShape {
         CIRCLE,
         SQUARE,
@@ -49,6 +46,7 @@ public abstract class Critter {
         STAR
     }
 
+    static int size = 0;
     /* the default color is white, which I hope makes critters invisible by default
      * If you change the background color of your View component, then update the default
      * color to be the same as you background
@@ -74,6 +72,13 @@ public abstract class Critter {
 
     public abstract CritterShape viewShape();
 
+    /**
+     * Checks whether a specific position is unoccupied
+     *
+     * @param direction int
+     * @param steps bool
+     * @return String, whether position is unoccupied
+     */
     protected final String look(int direction, boolean steps) {
         energy -= Params.LOOK_ENERGY_COST;
         int[] lookLocation = move(direction, x_coord, y_coord);
@@ -88,7 +93,6 @@ public abstract class Critter {
 
         return null;
     }
-
     /**
      * Prints out how many Critters of each type there are on the
      * board.
@@ -110,14 +114,94 @@ public abstract class Critter {
         }
         return stats;
     }
-    
-//
-//    public static void displayWorld(Object pane) {
-//        // TODO Implement this method
+
+
+    /**
+     * Displays grid with current active critters
+     *
+     */
+    public static void displayWorld(GridPane pane) {
+        pane.getChildren().clear();
+        //paintGridLines(pane);
+
+        for (int i = 0; i < population.size(); i++) {
+            Shape s = population.get(i).getShape(population.get(i).viewShape());
+            pane.add(s, population.get(i).x_coord, population.get(i).y_coord);
+        }
+    }
+
+    /*
+     * Paint the grid lines in orange.  The purpose is two-fold -- to indicate boundaries of
+     * icons, and as place-holders for empty cells.  Without placeholders, grid may not display properly.
+     */
+//    private static void paintGridLines(GridPane grid) {
+//        if (Params.WORLD_HEIGHT >= Params.WORLD_WIDTH) {
+//            size = 575/Params.WORLD_HEIGHT;
+//        }
+//        else {
+//            size = 575/Params.WORLD_WIDTH;
+//        }
+//        for (int i = 0; i < Params.WORLD_WIDTH; i++) { // columns
+//            for (int j = 0; j < Params.WORLD_HEIGHT; j++) { // rows
+//                Shape s = new Rectangle(size, size);
+//                s.setFill(null);
+//                s.setStroke(Color.ORANGE);
+//                grid.add(s, i, j);
+//            }
+//        }
 //    }
+
+    /*
+     * Returns a square or a circle depending on the shapeIndex parameter
+     *
+     */
+    private Shape getShape(CritterShape shape) {
+        Shape gridShape = null;
+
+        switch(shape) {
+            case CIRCLE: gridShape = new Circle(size/2);
+
+            case SQUARE: gridShape = new Rectangle(size, size);
+
+            case DIAMOND: gridShape = new Polygon();
+                ((Polygon) gridShape).getPoints().addAll(
+                        (double) size/2, (double) 2,
+                        (double) size-1, (double) size/2,
+                        (double) (size)/2, (double) size-1,
+                        (double) 1, (double) size/2);
+
+            case TRIANGLE: gridShape = new Polygon();
+                ((Polygon) gridShape).getPoints().addAll(
+                        (double) size-1, (double) size-1,
+                        (double) 1, (double) size-1,
+                        (double) (size)/2-1, 1.0);
+
+            case STAR: gridShape = new Polygon();
+                ((Polygon) gridShape).getPoints().addAll(
+                        (double) size/2, (double) (size/6)*0.5,
+                        (double) (size/6)*4, (double) (size/6)*2,
+                        (double) (size/6)*5.5, (double) (size/2),
+                        (double) (size/6)*4, (double) (size/6)*4,
+                        (double) (size/6)*5, (double) (size/6)*5.5,
+                        (double) (size/2), (double) (size/6)*5,
+                        (double) (size/6), (double) (size/6)*5.5,
+                        (double) (size/6)*2, (double) (size/6)*4,
+                        (double) (size/6)*0.5, (double) (size/2),
+                        (double) (size/6)*2, (double) (size/6)*2
+                );
+
+            default: gridShape = new Circle(size/2);
+        }
+
+        gridShape.setStroke(viewOutlineColor());
+        gridShape.setFill(viewFillColor());
+        return gridShape;
+    }
+
 
 	/* END --- NEW FOR PROJECT 5
 			rest is unchanged from Project 4 */
+
 
 
     // Private Variables
@@ -125,8 +209,8 @@ public abstract class Critter {
     private int x_coord;
     private int y_coord;
 
-    private static List<Critter> population = new ArrayList<Critter>();
-    private static List<Critter> babies = new ArrayList<Critter>();
+    private static final List<Critter> population = new ArrayList<Critter>();
+    private static final List<Critter> babies = new ArrayList<Critter>();
 
     //creating flags to check each critter's turns
     private boolean moveFlag = false;
@@ -134,7 +218,7 @@ public abstract class Critter {
 
     /* Gets the package name.  This assumes that Critter and its
      * subclasses are all in the same package. */
-    private static String myPackage;
+    private static final String myPackage;
     static {
         myPackage = Critter.class.getPackage().toString().split(" ")[1];
     }
@@ -306,55 +390,6 @@ public abstract class Critter {
             createCritter("Clover");
     }
 
-    /**
-     * Creates a 2 dimensional grid to display critters
-     */
-    public static void displayWorld() {
-        // TODO: Complete this method
-
-        int height = Params.WORLD_HEIGHT + 2;
-        int width = Params.WORLD_WIDTH + 2;
-        String[][] world = new String[width][height];
-
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                world[j][i] = " ";
-            }
-        }
-
-
-        // add critters
-        for (Critter c : population) {
-            world[c.x_coord+1][c.y_coord+1] = c.toString();
-        }
-
-
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                // top and bottom border
-                if (i == 0 || i == height - 1) {
-                    // print '+' on corners
-                    if (j == 0 || j == width - 1) {
-                        System.out.print('+');
-                    }
-                    // dashes on top and bottom ONLY
-                    else {
-                        System.out.print('-');
-                    }
-                }
-                // side border
-                else if (j == 0 || j == width - 1) {
-                    System.out.print('|');
-                }
-                // critters in between
-                else {
-                    System.out.print(world[j][i]);
-                }
-            }
-            // move to new line
-            System.out.println("");
-        }
-    }
 
 
     /**
