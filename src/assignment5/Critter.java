@@ -14,6 +14,7 @@
 
 package assignment5;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -24,7 +25,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 
@@ -115,6 +121,59 @@ public abstract class Critter {
         return stats;
     }
 
+    public static int sceneScale = 50;
+    private static final int TILE_SIZE = 40;
+    private static final int W = Params.WORLD_WIDTH * 40;
+    private static final int H = Params.WORLD_HEIGHT * 40;
+    private static final int X_TILES = W / TILE_SIZE;
+    private static final int Y_TILES = H / TILE_SIZE;
+    private static final int numColors = 6;
+    public static ByteArrayOutputStream testOutputString;
+
+    private Scene scene;
+
+    private String[] classNames = new String[100];
+    private int numberOfFiles = 0;
+    private int numberOfCritters = 0;
+    private String[] critterNames;
+
+    private Parent createGrid() {
+        Pane root = new Pane();
+        root.setPrefSize(W, H);
+
+        int colorIndex = (int)(Math.random() * numColors);
+
+        for (int y = 0; y < Y_TILES; y++) {
+            for (int x = 0; x < X_TILES; x++) {
+                Square tile = new Square(x, y, colorIndex);
+
+                root.getChildren().add(tile);
+
+            }
+        }
+
+        return root;
+    }
+
+    private class Square extends StackPane {
+        private int x, y;
+        private Color[] colorArray = {Color.BLACK, Color.LIGHTBLUE, Color.LIGHTBLUE, Color.GREEN, Color.RED,Color.SALMON};
+        private Rectangle border = new Rectangle(TILE_SIZE - 2, TILE_SIZE - 2);
+
+        public Square(int x, int y, int color) {
+            this.x = x;
+            this.y = y;
+
+            border.setStroke(Color.WHITE);
+            border.setFill(colorArray[color]);
+
+            getChildren().addAll(border);
+
+            setTranslateX(x * TILE_SIZE);
+            setTranslateY(y * TILE_SIZE);
+        }
+    }
+
 
     /**
      * Displays grid with current active critters
@@ -122,7 +181,8 @@ public abstract class Critter {
      */
     public static void displayWorld(GridPane pane) {
         pane.getChildren().clear();
-        //paintGridLines(pane);
+        paintGridLines(pane);
+
 
         for (int i = 0; i < population.size(); i++) {
             Shape s = population.get(i).getShape(population.get(i).viewShape());
@@ -134,22 +194,22 @@ public abstract class Critter {
      * Paint the grid lines in orange.  The purpose is two-fold -- to indicate boundaries of
      * icons, and as place-holders for empty cells.  Without placeholders, grid may not display properly.
      */
-//    private static void paintGridLines(GridPane grid) {
-//        if (Params.WORLD_HEIGHT >= Params.WORLD_WIDTH) {
-//            size = 575/Params.WORLD_HEIGHT;
-//        }
-//        else {
-//            size = 575/Params.WORLD_WIDTH;
-//        }
-//        for (int i = 0; i < Params.WORLD_WIDTH; i++) { // columns
-//            for (int j = 0; j < Params.WORLD_HEIGHT; j++) { // rows
-//                Shape s = new Rectangle(size, size);
-//                s.setFill(null);
-//                s.setStroke(Color.ORANGE);
-//                grid.add(s, i, j);
-//            }
-//        }
-//    }
+    private static void paintGridLines(GridPane grid) {
+        if (Params.WORLD_HEIGHT >= Params.WORLD_WIDTH) {
+            size = 575/Params.WORLD_HEIGHT;
+        }
+        else {
+            size = 575/Params.WORLD_WIDTH;
+        }
+        for (int i = 0; i < Params.WORLD_WIDTH; i++) { // columns
+            for (int j = 0; j < Params.WORLD_HEIGHT; j++) { // rows
+                Shape s = new Rectangle(size, size);
+                s.setFill(null);
+                s.setStroke(Color.ORANGE);
+                grid.add(s, i, j);
+            }
+        }
+    }
 
     /*
      * Returns a square or a circle depending on the shapeIndex parameter
