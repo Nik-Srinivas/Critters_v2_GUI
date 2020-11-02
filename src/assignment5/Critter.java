@@ -17,6 +17,19 @@ package assignment5;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+// JavaFX Packages for Displaying World
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
 /* 
  * See the PDF for descriptions of the methods and fields in this
  * class. 
@@ -97,6 +110,7 @@ public abstract class Critter {
         }
         return stats;
     }
+    
 //
 //    public static void displayWorld(Object pane) {
 //        // TODO Implement this method
