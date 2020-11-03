@@ -59,10 +59,8 @@ public class Main extends Application {
     public static final int Y_TILES = H / TILE_SIZE;
     public static final int numColors = 6;
     public static final int colorIndex = (int)(Math.random() * Main.numColors);
-    public static ByteArrayOutputStream testOutputString;
 
     private Scene scene;
-    private Boolean loopValue = true;
     private String[] classNames = new String[100];
     private int numberOfFiles = 0;
     private int numberOfCritters = 0;
@@ -95,12 +93,13 @@ public class Main extends Application {
             if (fileEntry.isDirectory()) {
                 listFilesForFolder(fileEntry);
             } else {
-                //System.out.println(fileEntry.getName());
                 classNames[numberOfFiles] = fileEntry.getName();
                 numberOfFiles += 1;
             }
         }
     }
+
+    // World Stage
     static GridPane gridz = new GridPane();
     public class SecondStage extends Stage {
 
@@ -113,6 +112,7 @@ public class Main extends Application {
         }
     }
 
+    // Stat Stage
     static GridPane stats = new GridPane();
     public class statStage extends Stage {
 
@@ -125,6 +125,7 @@ public class Main extends Application {
         }
     }
 
+    // refresh stats
     public int statRow = 0;
     public int statCol = 0;
     public void updateStats(GridPane pane) {
@@ -171,7 +172,7 @@ public class Main extends Application {
         Button show = new Button("Show");
         Button make = new Button("Make");
         Button step = new Button("Time Step");
-        Button run = new Button("Run");
+        Button run = new Button("Hold to Run");
         Button quit = new Button("Quit");
 
         Label make_error = new Label("");
@@ -211,7 +212,6 @@ public class Main extends Application {
         listOfCritters.setValue(critterNames[0]);
 
         // Create Stats window
-        //ThirdStage statistics = new ThirdStage();
 
         // TextFields for integer input
         TextField number_critters = new TextField();
@@ -233,7 +233,6 @@ public class Main extends Application {
                     else {
                         seed_error.setText("");
                         Critter.setSeed(val);
-                        //statistics.refreshStats();
                         Critter.displayWorld(gridz);
                     }
                 } catch (NumberFormatException e1) {
@@ -271,7 +270,6 @@ public class Main extends Application {
                 } catch (NumberFormatException e1) {
                     make_error.setText("Please enter a positive integer!");
                 }
-                //statistics.refreshStats();
                 Critter.displayWorld(gridz);
             }
         });
@@ -289,11 +287,8 @@ public class Main extends Application {
                             Critter.worldTimeStep();
                             Critter.displayWorld(gridz);
                         }
-                        //statistics.refreshStats();
                         step_error.setText("");
                         Critter.displayWorld(gridz);
-//                        String stats = Critter.runStats(Critter.population);
-//                        System.out.println(stats);
                         updateStats(stats);
                     }
                 } catch (NumberFormatException e1) {
@@ -318,12 +313,9 @@ public class Main extends Application {
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+
         // Find size of screen and set window sizes
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-        primaryStage.setX(primaryScreenBounds.getMinX());
-        primaryStage.setY(primaryScreenBounds.getMinY());
-        primaryStage.setWidth(primaryScreenBounds.getWidth()/2);
-        primaryStage.setHeight(primaryScreenBounds.getHeight()/2);
 
         // Adding objects/children and placing children
         top.setSpacing(10);
@@ -351,22 +343,20 @@ public class Main extends Application {
         center.add(step_number, 0, row + 6);
         center.add(step, 1, row + 6);
         center.add(run, 0, row + 7);
-
-                center.add(quit, 1, row + 7);
+        center.add(quit, 1, row + 7);
 
 
 
         // Error messages
-        center.add(make_error, 3, row + 1);
-        center.add(step_error, 2, row + 4);
-        center.add(seed_error, 2, row + 8);
+        center.add(make_error, 0, 10);
+        center.add(step_error, 0, 11);
+        center.add(seed_error, 0, 9);
 
         // Final steps to display
         borders.setTop(top);
         borders.setBottom(bottom);
         borders.setRight(right);
         borders.setLeft(left);
-        //borders.setCenter(center);
         Scene myScene = new Scene(center, primaryScreenBounds.getWidth()/2, primaryScreenBounds.getHeight()/2);
         myScene.setUserAgentStylesheet("Ordo.css");
         primaryStage.setScene(myScene);
