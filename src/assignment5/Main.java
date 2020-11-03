@@ -86,7 +86,7 @@ public class Main extends Application {
      // tile object
     public static class Square extends StackPane {
         private int x, y;
-        private Color[] colorArray = {Color.BLACK, Color.LIGHTBLUE, Color.LIGHTBLUE, Color.GREEN, Color.RED,Color.SALMON};
+        private Color[] colorArray = {Color.LAVENDER, Color.LIGHTBLUE, Color.LIGHTCORAL, Color.LIGHTSALMON, Color.LIGHTSLATEGREY,Color.LIGHTYELLOW};
         private Rectangle border = new Rectangle(TILE_SIZE - 2, TILE_SIZE - 2);
 
         public Square(int x, int y, int color) {
@@ -147,9 +147,9 @@ public class Main extends Application {
         Button show = new Button("Show");
         Button make = new Button("Make");
         Button seed = new Button("Set Seed");
-        Button step = new Button("Run Time Step");
+        Button step = new Button("Time Step");
         Button quit = new Button("Quit");
-        Button animate = new Button("Animate");
+        Button animate = new Button("Run");
         Label make_error = new Label("");
         Label step_error = new Label("");
         Label seed_error = new Label("");
