@@ -322,9 +322,6 @@ public class Main extends Application {
         center.add(new Label("Set Seed:"), 0, row + 7);
         center.add(seed_number, 0, row + 8);
         center.add(seed, 1, row + 8);
-        center.add(new Label("Scale Grid:"), 0, row + 10);
-//        center.add(grid, 1, row + 11);
-//        center.add(grid_scale, 0, row + 11);
         center.add(quit, 2, row + 11);
 
         // Error messages
