@@ -134,6 +134,30 @@ public class Main extends Application {
         }
     }
 
+    static GridPane stats = new GridPane();
+    public class statStage extends Stage {
+
+        statStage(){
+
+            scene = new Scene(stats);
+
+            this.setScene(scene);
+            this.show();
+        }
+    }
+
+    public int statRow = 0;
+    public int statCol = 0;
+    public void updateStats(GridPane pane) {
+        String stats = Critter.runStats(Critter.population);
+        pane.add(new Label(stats),statCol, statRow);
+        statRow++;
+        if (statRow >= 30) {
+            statCol++;
+            statRow = 0;
+        }
+
+    }
 
     @Override
     public void start(Stage primaryStage)  {
@@ -143,6 +167,12 @@ public class Main extends Application {
         Stage worldStage = new SecondStage();
         Critter.displayWorld(gridz);
         worldStage.setTitle("World of Critters");
+
+        // Stage Initialization
+        Stage statStage = new statStage();
+        statStage.setTitle("stats");
+        statStage.setMaxHeight(600);
+        statStage.setMaxWidth(600);
 
         // Layout Initialization
         BorderPane borders = new BorderPane();
@@ -279,8 +309,9 @@ public class Main extends Application {
                         //statistics.refreshStats();
                         step_error.setText("");
                         Critter.displayWorld(gridz);
-                        String stats = Critter.runStats(Critter.population);
-                        System.out.println(stats);
+//                        String stats = Critter.runStats(Critter.population);
+//                        System.out.println(stats);
+                        updateStats(stats);
                     }
                 } catch (NumberFormatException e1) {
                     step_error.setText("Please enter a positive integer!");
@@ -295,11 +326,12 @@ public class Main extends Application {
             }
         });
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), (ActionEvent event) -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), (ActionEvent event) -> {
             // this code will be called every second
             //System.out.println(run.isPressed() ? "pressed" : "released");
             if (run.isPressed()) {
                 RunWorld.run(Integer.parseInt(step_number.getText()));
+                updateStats(stats);
             }
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
