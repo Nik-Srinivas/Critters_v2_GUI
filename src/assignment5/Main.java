@@ -327,7 +327,6 @@ public class Main extends Application {
         });
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), (ActionEvent event) -> {
-            // this code will be called every second
             //System.out.println(run.isPressed() ? "pressed" : "released");
             if (run.isPressed()) {
                 RunWorld.run(Integer.parseInt(step_number.getText()));
