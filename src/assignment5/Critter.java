@@ -46,7 +46,6 @@ public abstract class Critter {
         STAR
     }
 
-    static int size = 0;
     /* the default color is white, which I hope makes critters invisible by default
      * If you change the background color of your View component, then update the default
      * color to be the same as you background
@@ -217,12 +216,12 @@ public abstract class Critter {
                     (double) (Main.TILE_SIZE/6), (double) (Main.TILE_SIZE/6)*5.5,
                     (double) (Main.TILE_SIZE/6)*2, (double) (Main.TILE_SIZE/6)*4,
                     (double) (Main.TILE_SIZE/6)*0.5, (double) (Main.TILE_SIZE/2),
-                    (double) (Main.TILE_SIZE/6)*2, (double) (size/6)*2
+                    (double) (Main.TILE_SIZE/6)*2, (double) (Main.TILE_SIZE/6)*2
             );
         }
 
 
-        else gridShape = new Circle(size/2);
+        else gridShape = new Circle(Main.TILE_SIZE/2);
 
 
         gridShape.setStroke(critter.viewOutlineColor());
