@@ -120,13 +120,38 @@ public abstract class Critter {
      * Displays grid with current active critters
      *
      */
+
     public static void displayWorld(GridPane pane) {
+
+        for (int y = 0; y < Main.Y_TILES; y++) {
+            for (int x = 0; x < Main.X_TILES; x++) {
+                Main.world[x][y] = null;
+            }
+        }
+        for (Critter c : population) {
+            Main.world[c.x_coord][c.y_coord] = c;
+        }
+
         pane.getChildren().clear();
         //paintGridLines(pane);
+        pane.setPrefSize(Main.W, Main.H);
 
-        for (int i = 0; i < population.size(); i++) {
-            Shape s = population.get(i).getShape(population.get(i).viewShape());
-            pane.add(s, population.get(i).x_coord, population.get(i).y_coord);
+        for (int y = 0; y < Main.Y_TILES; y++) {
+            for (int x = 0; x < Main.X_TILES; x++) {
+                if (Main.world[x][y] == null) {
+                    Main.Square tile = new Main.Square(x, y, Main.colorIndex);
+                    pane.add(tile, x, y);
+                }
+                else {
+                    Shape s = Main.world[x][y].getShape(Main.world[x][y].viewShape(), Main.world[x][y]);
+                    Shape test = new Circle(40);
+                    test.setStroke(Color.WHITE);
+                    test.setFill(Color.GREEN);
+
+                    pane.add(s, Main.world[x][y].x_coord, Main.world[x][y].y_coord);
+                }
+
+            }
         }
     }
 
@@ -155,46 +180,53 @@ public abstract class Critter {
      * Returns a square or a circle depending on the shapeIndex parameter
      *
      */
-    private Shape getShape(CritterShape shape) {
+    private Shape getShape(CritterShape shape, Critter critter) {
         Shape gridShape = null;
 
-        switch(shape) {
-            case CIRCLE: gridShape = new Circle(size/2);
+        if (shape.name() == "CIRCLE") gridShape = new Circle(Main.TILE_SIZE/2);
 
-            case SQUARE: gridShape = new Rectangle(size, size);
+        else if (shape.name() ==  "SQUARE") gridShape = new Rectangle(Main.TILE_SIZE, Main.TILE_SIZE);
 
-            case DIAMOND: gridShape = new Polygon();
-                ((Polygon) gridShape).getPoints().addAll(
-                        (double) size/2, (double) 2,
-                        (double) size-1, (double) size/2,
-                        (double) (size)/2, (double) size-1,
-                        (double) 1, (double) size/2);
-
-            case TRIANGLE: gridShape = new Polygon();
-                ((Polygon) gridShape).getPoints().addAll(
-                        (double) size-1, (double) size-1,
-                        (double) 1, (double) size-1,
-                        (double) (size)/2-1, 1.0);
-
-            case STAR: gridShape = new Polygon();
-                ((Polygon) gridShape).getPoints().addAll(
-                        (double) size/2, (double) (size/6)*0.5,
-                        (double) (size/6)*4, (double) (size/6)*2,
-                        (double) (size/6)*5.5, (double) (size/2),
-                        (double) (size/6)*4, (double) (size/6)*4,
-                        (double) (size/6)*5, (double) (size/6)*5.5,
-                        (double) (size/2), (double) (size/6)*5,
-                        (double) (size/6), (double) (size/6)*5.5,
-                        (double) (size/6)*2, (double) (size/6)*4,
-                        (double) (size/6)*0.5, (double) (size/2),
-                        (double) (size/6)*2, (double) (size/6)*2
-                );
-
-            default: gridShape = new Circle(size/2);
+        else if (shape.name() ==  "DIAMOND") {
+            gridShape = new Polygon();
+            ((Polygon) gridShape).getPoints().addAll(
+                    (double) Main.TILE_SIZE/2, (double) 2,
+                    (double) Main.TILE_SIZE-1, (double) Main.TILE_SIZE/2,
+                    (double) (Main.TILE_SIZE)/2, (double) Main.TILE_SIZE-1,
+                    (double) 1, (double) Main.TILE_SIZE/2);
         }
 
-        gridShape.setStroke(viewOutlineColor());
-        gridShape.setFill(viewFillColor());
+        else if (shape.name() == "TRIANGLE") {
+            gridShape = new Polygon();
+            ((Polygon) gridShape).getPoints().addAll(
+                    (double) Main.TILE_SIZE-1, (double) Main.TILE_SIZE-1,
+                    (double) 1, (double) Main.TILE_SIZE-1,
+                    (double) (Main.TILE_SIZE)/2-1, 1.0);
+        }
+
+
+        else if (shape.name() == "STAR"){
+            gridShape = new Polygon();
+            ((Polygon) gridShape).getPoints().addAll(
+                    (double) Main.TILE_SIZE/2, (double) (Main.TILE_SIZE/6)*0.5,
+                    (double) (Main.TILE_SIZE/6)*4, (double) (Main.TILE_SIZE/6)*2,
+                    (double) (Main.TILE_SIZE/6)*5.5, (double) (Main.TILE_SIZE/2),
+                    (double) (Main.TILE_SIZE/6)*4, (double) (Main.TILE_SIZE/6)*4,
+                    (double) (Main.TILE_SIZE/6)*5, (double) (Main.TILE_SIZE/6)*5.5,
+                    (double) (Main.TILE_SIZE/2), (double) (Main.TILE_SIZE/6)*5,
+                    (double) (Main.TILE_SIZE/6), (double) (Main.TILE_SIZE/6)*5.5,
+                    (double) (Main.TILE_SIZE/6)*2, (double) (Main.TILE_SIZE/6)*4,
+                    (double) (Main.TILE_SIZE/6)*0.5, (double) (Main.TILE_SIZE/2),
+                    (double) (Main.TILE_SIZE/6)*2, (double) (size/6)*2
+            );
+        }
+
+
+        else gridShape = new Circle(size/2);
+
+
+        gridShape.setStroke(critter.viewOutlineColor());
+        gridShape.setFill(critter.viewFillColor());
         return gridShape;
     }
 

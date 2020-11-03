@@ -66,43 +66,25 @@ public class Main extends Application {
         myPackage = Main.class.getPackage().toString().split(" ")[1];
     }
 
-    public static int sceneScale = 50;
-    private static final int TILE_SIZE = 40;
-    private static final int W = Params.WORLD_WIDTH * 40;
-    private static final int H = Params.WORLD_HEIGHT * 40;
-    private static final int X_TILES = W / TILE_SIZE;
-    private static final int Y_TILES = H / TILE_SIZE;
-    private static final int numColors = 6;
+    public static final int TILE_SIZE = 40;
+    public static final int W = Params.WORLD_WIDTH * TILE_SIZE;
+    public static final int H = Params.WORLD_HEIGHT * TILE_SIZE;
+    public static final int X_TILES = W / TILE_SIZE;
+    public static final int Y_TILES = H / TILE_SIZE;
+    public static final int numColors = 6;
+    public static final int colorIndex = (int)(Math.random() * Main.numColors);
     public static ByteArrayOutputStream testOutputString;
 
-    private Square[][] grid = new Square[X_TILES][Y_TILES];
     private Scene scene;
 
     private String[] classNames = new String[100];
     private int numberOfFiles = 0;
     private int numberOfCritters = 0;
     private String[] critterNames;
+    public static Critter[][] world = new Critter[Params.WORLD_WIDTH][Params.WORLD_HEIGHT];
 
-    private Parent createGrid() {
-        Pane root = new Pane();
-        root.setPrefSize(W, H);
-
-        int colorIndex = (int)(Math.random() * numColors);
-
-        for (int y = 0; y < Y_TILES; y++) {
-            for (int x = 0; x < X_TILES; x++) {
-                Square tile = new Square(x, y, colorIndex);
-
-                grid[x][y] = tile;
-                root.getChildren().add(tile);
-
-            }
-        }
-
-        return root;
-    }
      // tile object
-    private class Square extends StackPane {
+    public static class Square extends StackPane {
         private int x, y;
         private Color[] colorArray = {Color.BLACK, Color.LIGHTBLUE, Color.LIGHTBLUE, Color.GREEN, Color.RED,Color.SALMON};
         private Rectangle border = new Rectangle(TILE_SIZE - 2, TILE_SIZE - 2);
@@ -116,8 +98,8 @@ public class Main extends Application {
 
             getChildren().addAll(border);
 
-            setTranslateX(x * TILE_SIZE);
-            setTranslateY(y * TILE_SIZE);
+            //setTranslateX(x * TILE_SIZE);
+            //setTranslateY(y * TILE_SIZE);
         }
     }
 
@@ -133,11 +115,12 @@ public class Main extends Application {
             }
         }
     }
-
+    static GridPane gridz = new GridPane();
     public class SecondStage extends Stage {
 
         SecondStage(){
-            scene = new Scene(createGrid());
+
+            scene = new Scene(gridz);
 
             this.setScene(scene);
             this.show();
@@ -151,6 +134,7 @@ public class Main extends Application {
 
         //Initial creation of most major controls and layouts
         Stage worldStage = new SecondStage();
+        Critter.displayWorld(gridz);
         worldStage.setTitle("World of Critters");
 
         BorderPane borders = new BorderPane();
@@ -166,21 +150,9 @@ public class Main extends Application {
         Button step = new Button("Run Time Step");
         Button quit = new Button("Quit");
         Button animate = new Button("Animate");
-        Button grid = new Button("Scale");
         Label make_error = new Label("");
         Label step_error = new Label("");
         Label seed_error = new Label("");
-
-        // Slider for scaling of grid display
-        Slider grid_scale = new Slider();
-        grid_scale.setMin(1);
-        grid_scale.setMax(100);
-        grid_scale.setValue(40);
-        grid_scale.setShowTickLabels(false);
-        grid_scale.setShowTickMarks(false);
-        grid_scale.setMajorTickUnit(50);
-        grid_scale.setMinorTickCount(5);
-        grid_scale.setBlockIncrement(10);
 
         // Obtain Critter subclasses for make
         String workingDir = System.getProperty("user.dir") + "/src/assignment5";
@@ -224,89 +196,81 @@ public class Main extends Application {
         step_number.setPromptText("Number of steps...");
         TextField seed_number = new TextField();
         seed_number.setPromptText("Seed value...");
-//
-//        // Button Action Handling
-//        grid.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                sceneScale = (int)grid_scale.getValue();
-//                Critter.displayWorld();
-//            }
-//        } ) ;
-//        show.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                Critter.displayWorld();
-//
-//            }
-//        } ) ;
-//        make.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                String critterType = listOfCritters.getValue();
-//                try {
-//                    int val = Integer.parseInt(number_critters.getText());
-//                    if (val < 0) {
-//                        make_error.setText("Please enter a positive integer!");
-//                    }
-//                    else {
-//                        for (int i = 0; i < val; i += 1) {
-//                            Critter.makeCritter(critterType);
-//                        }
-//                        make_error.setText("");
-//                        Critter.displayWorld();
-//                    }
-//                } catch (InvalidCritterException e1) {
-//
-//                } catch (NumberFormatException e1) {
-//                    make_error.setText("Please enter a positive integer!");
-//                }
-//                statistics.refreshStats();
-//                Critter.displayWorld();
-//            }
-//        });
-//        step.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                try {
-//                    int val = Integer.parseInt(step_number.getText());
-//                    if (val < 0) {
-//                        step_error.setText("Please enter a positive integer!");
-//                    }
-//                    else {
-//                        for (int i = 0; i < val; i += 1){
-//                            Critter.worldTimeStep();
-//                            Critter.displayWorld();
-//                        }
-//                        statistics.refreshStats();
-//                        step_error.setText("");
-//                        Critter.displayWorld();
-//                    }
-//                } catch (NumberFormatException e1) {
-//                    step_error.setText("Please enter a positive integer!");
-//                }
-//            }
-//        });
-//        seed.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                try {
-//
-//                    long val = Long.parseLong(seed_number.getText(), 10);
-//                    if (val < 0) {
-//                        seed_error.setText("Please enter a positive integer!");
-//                    }
-//                    else {
-//                        seed_error.setText("");
-//                        Critter.setSeed(val);
-//                        statistics.refreshStats();
-//                        Critter.displayWorld();
-//                    }
-//                } catch (NumberFormatException e1) {
-//                    seed_error.setText("Please enter a positive integer!");
-//                }
-//            }
-//        });
+
+        show.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Critter.displayWorld(new GridPane());
+
+            }
+        } ) ;
+        make.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String critterType = listOfCritters.getValue();
+                try {
+                    int val = Integer.parseInt(number_critters.getText());
+                    if (val < 0) {
+                        make_error.setText("Please enter a positive integer!");
+                    }
+                    else {
+                        for (int i = 0; i < val; i += 1) {
+                            Critter.createCritter(critterType);
+                        }
+                        make_error.setText("");
+                        Critter.displayWorld(gridz);
+                    }
+                } catch (InvalidCritterException e1) {
+
+                } catch (NumberFormatException e1) {
+                    make_error.setText("Please enter a positive integer!");
+                }
+                //statistics.refreshStats();
+                Critter.displayWorld(gridz);
+            }
+        });
+        step.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    int val = Integer.parseInt(step_number.getText());
+                    if (val < 0) {
+                        step_error.setText("Please enter a positive integer!");
+                    }
+                    else {
+                        for (int i = 0; i < val; i += 1){
+                            Critter.worldTimeStep();
+                            Critter.displayWorld(gridz);
+                        }
+                        //statistics.refreshStats();
+                        step_error.setText("");
+                        Critter.displayWorld(gridz);
+                    }
+                } catch (NumberFormatException e1) {
+                    step_error.setText("Please enter a positive integer!");
+                }
+            }
+        });
+        seed.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+
+                    long val = Long.parseLong(seed_number.getText(), 10);
+                    if (val < 0) {
+                        seed_error.setText("Please enter a positive integer!");
+                    }
+                    else {
+                        seed_error.setText("");
+                        Critter.setSeed(val);
+                        //statistics.refreshStats();
+                        Critter.displayWorld(gridz);
+                    }
+                } catch (NumberFormatException e1) {
+                    seed_error.setText("Please enter a positive integer!");
+                }
+            }
+        });
         quit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -359,8 +323,8 @@ public class Main extends Application {
         center.add(seed_number, 0, row + 8);
         center.add(seed, 1, row + 8);
         center.add(new Label("Scale Grid:"), 0, row + 10);
-        center.add(grid, 1, row + 11);
-        center.add(grid_scale, 0, row + 11);
+//        center.add(grid, 1, row + 11);
+//        center.add(grid_scale, 0, row + 11);
         center.add(quit, 2, row + 11);
 
         // Error messages
@@ -378,7 +342,7 @@ public class Main extends Application {
         myScene.setUserAgentStylesheet("Ordo.css");
         primaryStage.setScene(myScene);
         primaryStage.show();
-        Critter.displayWorld();
+        Critter.displayWorld(new GridPane());
     }
 
 

@@ -18,7 +18,7 @@ package assignment5;
 public class Critter1 extends Critter{
     @Override
     public CritterShape viewShape() {
-        return null;
+        return CritterShape.CIRCLE;
     }
 
     // Critter1 reproduces unless direction = 2, then it runs

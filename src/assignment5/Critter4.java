@@ -15,12 +15,18 @@
 
 package assignment5;
 
+import javafx.scene.paint.Color;
+
 public class Critter4 extends Critter{
     public boolean fought = true;
 
     @Override
     public CritterShape viewShape() {
-        return null;
+        return CritterShape.STAR;
+    }
+
+    public javafx.scene.paint.Color viewColor() {
+        return Color.ORANGE;
     }
 
     // Critter4 walk if energe < 10, reproduces if energy between 10 - 15, and runs otherwise

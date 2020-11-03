@@ -18,7 +18,11 @@ package assignment5;
 public class Critter2 extends Critter{
     @Override
     public CritterShape viewShape() {
-        return null;
+        return CritterShape.DIAMOND;
+    }
+
+    public javafx.scene.paint.Color viewColor() {
+        return javafx.scene.paint.Color.RED;
     }
 
     // Critter1 runs unless direction = 0, then it walks
