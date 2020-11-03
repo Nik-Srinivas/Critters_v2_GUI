@@ -14,9 +14,14 @@
 
 package assignment5;
 
+import com.sun.org.apache.xpath.internal.objects.XBoolean;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -27,13 +32,15 @@ import javafx.scene.paint.Color;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,9 +49,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -76,7 +80,7 @@ public class Main extends Application {
     public static ByteArrayOutputStream testOutputString;
 
     private Scene scene;
-
+    private Boolean loopValue = true;
     private String[] classNames = new String[100];
     private int numberOfFiles = 0;
     private int numberOfCritters = 0;
@@ -127,7 +131,7 @@ public class Main extends Application {
         }
     }
 
-    //Jonah
+
     @Override
     public void start(Stage primaryStage)  {
 
@@ -278,52 +282,30 @@ public class Main extends Application {
             }
         });
 
-        boolean runClicked = false;
-        run.setOnAction(new EventHandler<ActionEvent>() {
+        run.armedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
-            public void handle(ActionEvent event) {
-                try {
-                    int val = Integer.parseInt(step_number.getText());
-                    if (val < 0) {
-                        step_error.setText("Please enter a positive integer!");
-                    }
-                    else {
-                        while(true) RunWorld.run(val);
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                System.out.println("OLD: " + oldValue + "  NEW: " + newValue) ;
 
-                    }
+                if (loopValue == newValue){
+                    Critter.worldTimeStep();
+                    Critter.displayWorld(Main.gridz);
                 }
-
-                catch (NumberFormatException e1) {
-                    step_error.setText("Please enter a positive integer!");
+                else{
+                    System.out.println("Life Sucks");
                 }
+                loopValue = !loopValue;
             }
         });
 
-        run.setOnMousePressed(new EventHandler<ActionEvent>() {
-            /**
-             * Invoked when a specific event of the type for which this handler is
-             * registered happens.
-             *
-             * @param event the event which occurred
-             */
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    int val = Integer.parseInt(step_number.getText());
-                    if (val < 0) {
-                        step_error.setText("Please enter a positive integer!");
-                    }
-                    else {
-                        while(true) RunWorld.run(val);
 
-                    }
-                }
 
-                catch (NumberFormatException e1) {
-                    step_error.setText("Please enter a positive integer!");
-                }
-            }
+
+        run.setOnMouseReleased(e1 -> {
+            run.setText("Run");
         });
+
+
         // Find size of screen and set window sizes
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setX(primaryScreenBounds.getMinX());
@@ -383,11 +365,16 @@ public class Main extends Application {
         primaryStage.setScene(myScene);
         primaryStage.show();
         Critter.displayWorld(new GridPane());
+
+
+
+
     }
 
 
     public static void main(String[] args) {
         launch(args);
     }
+
 
 }

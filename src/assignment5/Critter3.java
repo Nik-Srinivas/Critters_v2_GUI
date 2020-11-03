@@ -17,6 +17,8 @@ package assignment5;
 
 import javafx.scene.paint.Color;
 
+import java.util.List;
+
 public class Critter3 extends Critter{
 
     public boolean walk = false;
@@ -54,5 +56,10 @@ public class Critter3 extends Critter{
 
     public String toString() {
         return "3";
+    }
+
+    public static String runStats(List<Critter> crit3) {
+        String s = "" + crit3.size() + " critters as follows -> 3: " + crit3.size();
+        return s;
     }
 }

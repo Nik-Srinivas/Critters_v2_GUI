@@ -17,6 +17,8 @@ package assignment5;
 
 import javafx.scene.paint.Color;
 
+import java.util.List;
+
 public class Critter4 extends Critter{
     public boolean fought = true;
 
@@ -50,5 +52,10 @@ public class Critter4 extends Critter{
 
     public String toString() {
         return "4";
+    }
+
+    public static String runStats(List<Critter> crit4) {
+        String s = "" + crit4.size() + " critters as follows -> 4: " + crit4.size();
+        return s;
     }
 }

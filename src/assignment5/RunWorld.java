@@ -13,7 +13,7 @@ public class RunWorld {
             System.out.println("Seconds passed: " + tracker);
         }
     };
-    public void start(int count) {
+    public int start(int count) {
         try {
             for (int i = 0; i < count; i++) {
                 TimeUnit.MILLISECONDS.sleep(500);
@@ -23,7 +23,8 @@ public class RunWorld {
         } catch (Exception e1) {
             System.out.println("Exception Thrown");
         }
-        //animationTimer.schedule(animationTask, 1000, 1000);
+        return 0;
+
     }
 
     public static void run(int animationCount) {

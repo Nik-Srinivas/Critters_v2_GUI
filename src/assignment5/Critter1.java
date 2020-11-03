@@ -17,6 +17,8 @@ package assignment5;
 
 import javafx.scene.paint.Color;
 
+import java.util.List;
+
 public class Critter1 extends Critter{
     @Override
     public CritterShape viewShape() {
@@ -55,5 +57,10 @@ public class Critter1 extends Critter{
 
     public String toString() {
         return "1";
+    }
+
+    public static String runStats(List<Critter> crit1) {
+        String s = "" + crit1.size() + " critters as follows -> 1: " + crit1.size();
+        return s;
     }
 }
