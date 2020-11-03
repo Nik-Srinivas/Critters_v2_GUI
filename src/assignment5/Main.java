@@ -15,6 +15,8 @@
 package assignment5;
 
 import com.sun.org.apache.xpath.internal.objects.XBoolean;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Parent;
@@ -55,6 +57,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 
 
@@ -136,29 +139,33 @@ public class Main extends Application {
     public void start(Stage primaryStage)  {
 
 
-        //Initial creation of most major controls and layouts
+        // Stage Initialization
         Stage worldStage = new SecondStage();
         Critter.displayWorld(gridz);
         worldStage.setTitle("World of Critters");
 
+        // Layout Initialization
         BorderPane borders = new BorderPane();
         HBox top = new HBox();
         HBox bottom = new HBox();
         VBox left = new VBox();
         VBox right = new VBox();
         GridPane center = new GridPane();
+
+        // Button Initialization
         primaryStage.setTitle("Welcome to Critters!");
+        Button seed = new Button("Set Seed");
         Button show = new Button("Show");
         Button make = new Button("Make");
-        Button seed = new Button("Set Seed");
         Button step = new Button("Time Step");
-        Button quit = new Button("Quit");
         Button run = new Button("Run");
+        Button quit = new Button("Quit");
+
         Label make_error = new Label("");
         Label step_error = new Label("");
         Label seed_error = new Label("");
 
-        // Obtain Critter subclasses for make
+        // get Critter classes for create
         String workingDir = System.getProperty("user.dir") + "/src/assignment5";
         File myCritters = new File(workingDir);
         listFilesForFolder(myCritters);
@@ -201,6 +208,27 @@ public class Main extends Application {
         TextField seed_number = new TextField();
         seed_number.setPromptText("Seed value...");
 
+        seed.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+
+                    long val = Long.parseLong(seed_number.getText(), 10);
+                    if (val < 0) {
+                        seed_error.setText("Please enter a positive integer!");
+                    }
+                    else {
+                        seed_error.setText("");
+                        Critter.setSeed(val);
+                        //statistics.refreshStats();
+                        Critter.displayWorld(gridz);
+                    }
+                } catch (NumberFormatException e1) {
+                    seed_error.setText("Please enter a positive integer!");
+                }
+            }
+        });
+
         show.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -208,6 +236,7 @@ public class Main extends Application {
 
             }
         } ) ;
+
         make.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -233,6 +262,7 @@ public class Main extends Application {
                 Critter.displayWorld(gridz);
             }
         });
+
         step.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -255,26 +285,7 @@ public class Main extends Application {
                 }
             }
         });
-        seed.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
 
-                    long val = Long.parseLong(seed_number.getText(), 10);
-                    if (val < 0) {
-                        seed_error.setText("Please enter a positive integer!");
-                    }
-                    else {
-                        seed_error.setText("");
-                        Critter.setSeed(val);
-                        //statistics.refreshStats();
-                        Critter.displayWorld(gridz);
-                    }
-                } catch (NumberFormatException e1) {
-                    seed_error.setText("Please enter a positive integer!");
-                }
-            }
-        });
         quit.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -282,30 +293,15 @@ public class Main extends Application {
             }
         });
 
-        run.armedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                System.out.println("OLD: " + oldValue + "  NEW: " + newValue) ;
-
-                if (loopValue == newValue){
-                    Critter.worldTimeStep();
-                    Critter.displayWorld(Main.gridz);
-                }
-                else{
-                    System.out.println("Life Sucks");
-                }
-                loopValue = !loopValue;
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), (ActionEvent event) -> {
+            // this code will be called every second
+            System.out.println(run.isPressed() ? "pressed" : "released");
+            if (run.isPressed()) {
+                RunWorld.run(Integer.parseInt(step_number.getText()));
             }
-        });
-
-
-
-
-        run.setOnMouseReleased(e1 -> {
-            run.setText("Run");
-        });
-
-
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
         // Find size of screen and set window sizes
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setX(primaryScreenBounds.getMinX());
@@ -335,7 +331,7 @@ public class Main extends Application {
         center.add(listOfCritters, 0, row + 4);
         center.add(number_critters, 1, row + 4);
         center.add(make, 2, row + 4);
-        center.add(new Label("Critter Motion Handling:"), 0, row + 5);
+        center.add(new Label("Run Game:"), 0, row + 5);
         center.add(step_number, 0, row + 6);
         center.add(step, 1, row + 6);
         center.add(run, 0, row + 7);
