@@ -330,7 +330,7 @@ public class Main extends Application {
             }
         });
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.5), (ActionEvent event) -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.2), (ActionEvent event) -> {
             //System.out.println(run.isPressed() ? "pressed" : "released");
             if (run.isPressed()) {
                 RunWorld.run(Integer.parseInt(step_number.getText()));

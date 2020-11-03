@@ -16,7 +16,7 @@ public class RunWorld {
     public int start(int count) {
         try {
             for (int i = 0; i < count; i++) {
-                TimeUnit.MILLISECONDS.sleep(500);
+                //TimeUnit.MILLISECONDS.sleep(500);
 
                 animationTask.run();
             }
