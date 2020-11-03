@@ -149,7 +149,7 @@ public class Main extends Application {
         Button seed = new Button("Set Seed");
         Button step = new Button("Time Step");
         Button quit = new Button("Quit");
-        Button animate = new Button("Run");
+        Button run = new Button("Run");
         Label make_error = new Label("");
         Label step_error = new Label("");
         Label seed_error = new Label("");
@@ -277,14 +277,53 @@ public class Main extends Application {
                 System.exit(1);
             }
         });
-//        animate.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                Animate.animate(3);
-//
-//            }
-//        });
 
+        boolean runClicked = false;
+        run.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    int val = Integer.parseInt(step_number.getText());
+                    if (val < 0) {
+                        step_error.setText("Please enter a positive integer!");
+                    }
+                    else {
+                        while(true) RunWorld.run(val);
+
+                    }
+                }
+
+                catch (NumberFormatException e1) {
+                    step_error.setText("Please enter a positive integer!");
+                }
+            }
+        });
+
+        run.setOnMousePressed(new EventHandler<ActionEvent>() {
+            /**
+             * Invoked when a specific event of the type for which this handler is
+             * registered happens.
+             *
+             * @param event the event which occurred
+             */
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    int val = Integer.parseInt(step_number.getText());
+                    if (val < 0) {
+                        step_error.setText("Please enter a positive integer!");
+                    }
+                    else {
+                        while(true) RunWorld.run(val);
+
+                    }
+                }
+
+                catch (NumberFormatException e1) {
+                    step_error.setText("Please enter a positive integer!");
+                }
+            }
+        });
         // Find size of screen and set window sizes
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setX(primaryScreenBounds.getMinX());
@@ -317,7 +356,7 @@ public class Main extends Application {
         center.add(new Label("Critter Motion Handling:"), 0, row + 5);
         center.add(step_number, 0, row + 6);
         center.add(step, 1, row + 6);
-        center.add(animate, 0, row + 7);
+        center.add(run, 0, row + 7);
 
         center.add(quit, 1, row + 7);
 //        top.getChildren().addAll(seed);

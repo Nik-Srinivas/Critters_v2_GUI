@@ -143,10 +143,7 @@ public abstract class Critter {
                 }
                 else {
                     Shape s = Main.world[x][y].getShape(Main.world[x][y].viewShape(), Main.world[x][y]);
-                    Shape test = new Circle(40);
-                    test.setStroke(Color.WHITE);
-                    test.setFill(Color.GREEN);
-
+                    pane.add(new Main.Square(x, y, Main.colorIndex), x, y);
                     pane.add(s, Main.world[x][y].x_coord, Main.world[x][y].y_coord);
                 }
 
@@ -182,46 +179,46 @@ public abstract class Critter {
     private Shape getShape(CritterShape shape, Critter critter) {
         Shape gridShape = null;
 
-        if (shape.name() == "CIRCLE") gridShape = new Circle(Main.TILE_SIZE/2);
+        if (shape.name() == "CIRCLE") gridShape = new Circle((Main.TILE_SIZE - 5)/2);
 
-        else if (shape.name() ==  "SQUARE") gridShape = new Rectangle(Main.TILE_SIZE, Main.TILE_SIZE);
+        else if (shape.name() ==  "SQUARE") gridShape = new Rectangle((Main.TILE_SIZE - 5), (Main.TILE_SIZE - 5));
 
         else if (shape.name() ==  "DIAMOND") {
             gridShape = new Polygon();
             ((Polygon) gridShape).getPoints().addAll(
-                    (double) Main.TILE_SIZE/2, (double) 2,
-                    (double) Main.TILE_SIZE-1, (double) Main.TILE_SIZE/2,
-                    (double) (Main.TILE_SIZE)/2, (double) Main.TILE_SIZE-1,
-                    (double) 1, (double) Main.TILE_SIZE/2);
+                    (double) (Main.TILE_SIZE - 5)/2, (double) 2,
+                    (double) (Main.TILE_SIZE - 5)-1, (double) (Main.TILE_SIZE - 5)/2,
+                    (double) ((Main.TILE_SIZE - 5))/2, (double) (Main.TILE_SIZE - 5)-1,
+                    (double) 1, (double) (Main.TILE_SIZE - 5)/2);
         }
 
         else if (shape.name() == "TRIANGLE") {
             gridShape = new Polygon();
             ((Polygon) gridShape).getPoints().addAll(
-                    (double) Main.TILE_SIZE-1, (double) Main.TILE_SIZE-1,
-                    (double) 1, (double) Main.TILE_SIZE-1,
-                    (double) (Main.TILE_SIZE)/2-1, 1.0);
+                    (double) (Main.TILE_SIZE - 5)-1, (double) (Main.TILE_SIZE - 5)-1,
+                    (double) 1, (double) (Main.TILE_SIZE - 5)-1,
+                    (double) ((Main.TILE_SIZE - 5))/2-1, 1.0);
         }
 
 
         else if (shape.name() == "STAR"){
             gridShape = new Polygon();
             ((Polygon) gridShape).getPoints().addAll(
-                    (double) Main.TILE_SIZE/2, (double) (Main.TILE_SIZE/6)*0.5,
-                    (double) (Main.TILE_SIZE/6)*4, (double) (Main.TILE_SIZE/6)*2,
-                    (double) (Main.TILE_SIZE/6)*5.5, (double) (Main.TILE_SIZE/2),
-                    (double) (Main.TILE_SIZE/6)*4, (double) (Main.TILE_SIZE/6)*4,
-                    (double) (Main.TILE_SIZE/6)*5, (double) (Main.TILE_SIZE/6)*5.5,
-                    (double) (Main.TILE_SIZE/2), (double) (Main.TILE_SIZE/6)*5,
-                    (double) (Main.TILE_SIZE/6), (double) (Main.TILE_SIZE/6)*5.5,
-                    (double) (Main.TILE_SIZE/6)*2, (double) (Main.TILE_SIZE/6)*4,
-                    (double) (Main.TILE_SIZE/6)*0.5, (double) (Main.TILE_SIZE/2),
-                    (double) (Main.TILE_SIZE/6)*2, (double) (Main.TILE_SIZE/6)*2
+                    (double) (Main.TILE_SIZE - 5)/2, (double) ((Main.TILE_SIZE - 5)/6)*0.5,
+                    (double) ((Main.TILE_SIZE - 5)/6)*4, (double) ((Main.TILE_SIZE - 5)/6)*2,
+                    (double) ((Main.TILE_SIZE - 5)/6)*5.5, (double) ((Main.TILE_SIZE - 5)/2),
+                    (double) ((Main.TILE_SIZE - 5)/6)*4, (double) ((Main.TILE_SIZE - 5)/6)*4,
+                    (double) ((Main.TILE_SIZE - 5)/6)*5, (double) ((Main.TILE_SIZE - 5)/6)*5.5,
+                    (double) ((Main.TILE_SIZE - 5)/2), (double) ((Main.TILE_SIZE - 5)/6)*5,
+                    (double) ((Main.TILE_SIZE - 5)/6), (double) ((Main.TILE_SIZE - 5)/6)*5.5,
+                    (double) ((Main.TILE_SIZE - 5)/6)*2, (double) ((Main.TILE_SIZE - 5)/6)*4,
+                    (double) ((Main.TILE_SIZE - 5)/6)*0.5, (double) ((Main.TILE_SIZE - 5)/2),
+                    (double) ((Main.TILE_SIZE - 5)/6)*2, (double) ((Main.TILE_SIZE - 5)/6)*2
             );
         }
 
 
-        else gridShape = new Circle(Main.TILE_SIZE/2);
+        else gridShape = new Circle((Main.TILE_SIZE - 5)/2);
 
 
         gridShape.setStroke(critter.viewOutlineColor());
