@@ -200,7 +200,7 @@ public class Main extends Application {
         // Create Stats window
         //ThirdStage statistics = new ThirdStage();
 
-        // TextFields for integer input (make and step)
+        // TextFields for integer input
         TextField number_critters = new TextField();
         number_critters.setPromptText("Number of Critters...");
         TextField step_number = new TextField();
