@@ -162,9 +162,13 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage)  {
 
+        primaryStage.setMaxHeight(600);
+        primaryStage.setMaxWidth(600);
 
         // Stage Initialization
         Stage worldStage = new SecondStage();
+        worldStage.setMaxWidth(Params.WORLD_WIDTH * 40);
+        worldStage.setMaxHeight(Params.WORLD_HEIGHT * 41);
         Critter.displayWorld(gridz);
         worldStage.setTitle("World of Critters");
 
@@ -369,12 +373,7 @@ public class Main extends Application {
         center.add(step, 1, row + 6);
         center.add(run, 0, row + 7);
 
-        center.add(quit, 1, row + 7);
-//        top.getChildren().addAll(seed);
-//        //top.getChildren().addAll(listOfCritters, number_critters, make);
-//        bottom.getChildren().addAll(quit);
-//        left.getChildren().addAll(seed);
-
+                center.add(quit, 1, row + 7);
 
 
 
