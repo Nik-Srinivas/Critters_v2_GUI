@@ -108,7 +108,7 @@ public abstract class Critter {
         }
         String prefix = "";
         for (String s : critter_count.keySet()) {
-            stats = (prefix + s + ":" + critter_count.get(s));
+            stats += (prefix + s + ":" + critter_count.get(s));
             prefix = ", ";
         }
         return stats;
@@ -237,7 +237,7 @@ public abstract class Critter {
     private int x_coord;
     private int y_coord;
 
-    private static final List<Critter> population = new ArrayList<Critter>();
+    public static final List<Critter> population = new ArrayList<Critter>();
     private static final List<Critter> babies = new ArrayList<Critter>();
 
     //creating flags to check each critter's turns

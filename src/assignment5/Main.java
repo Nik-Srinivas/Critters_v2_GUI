@@ -279,6 +279,8 @@ public class Main extends Application {
                         //statistics.refreshStats();
                         step_error.setText("");
                         Critter.displayWorld(gridz);
+                        String stats = Critter.runStats(Critter.population);
+                        System.out.println(stats);
                     }
                 } catch (NumberFormatException e1) {
                     step_error.setText("Please enter a positive integer!");
@@ -295,7 +297,7 @@ public class Main extends Application {
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), (ActionEvent event) -> {
             // this code will be called every second
-            System.out.println(run.isPressed() ? "pressed" : "released");
+            //System.out.println(run.isPressed() ? "pressed" : "released");
             if (run.isPressed()) {
                 RunWorld.run(Integer.parseInt(step_number.getText()));
             }
