@@ -26,7 +26,7 @@ public class Critter4 extends Critter{
     }
 
     public javafx.scene.paint.Color viewColor() {
-        return Color.ORANGE;
+        return Color.PURPLE;
     }
 
     // Critter4 walk if energe < 10, reproduces if energy between 10 - 15, and runs otherwise

@@ -15,10 +15,16 @@
 
 package assignment5;
 
+import javafx.scene.paint.Color;
+
 public class Critter1 extends Critter{
     @Override
     public CritterShape viewShape() {
         return CritterShape.CIRCLE;
+    }
+
+    public javafx.scene.paint.Color viewColor() {
+        return Color.RED;
     }
 
     // Critter1 reproduces unless direction = 2, then it runs
@@ -32,9 +38,19 @@ public class Critter1 extends Critter{
     // only fights Critter4
     @Override
     public boolean fight(String oponent) {
-        if (oponent.equals("4")) return true;
+        if (oponent.equals("4")){
+            int dir = 0;
+            while (dir < 8) {
+                if (look(dir, true) == null) {
+                    run(dir);
+                    break;
+                }
+                dir++;
+            }
+            return false;
+        }
 
-        return false;
+        return true;
     }
 
     public String toString() {

@@ -15,6 +15,8 @@
 
 package assignment5;
 
+import javafx.scene.paint.Color;
+
 public class Critter3 extends Critter{
 
     public boolean walk = false;
@@ -25,7 +27,7 @@ public class Critter3 extends Critter{
     }
 
     public javafx.scene.paint.Color viewColor() {
-        return javafx.scene.paint.Color.BLUE;
+        return Color.BLUE;
     }
 
     // Critter3 does intervals of walking and running
@@ -40,10 +42,13 @@ public class Critter3 extends Critter{
         else run(dir);
     }
 
-    // only fights Critter4
+    // only fights if it has a lot of energy
     @Override
     public boolean fight(String oponent) {
-        if (getEnergy() > 20 && oponent.equals("2")) return true;
+        if(getEnergy() > 50) {
+            super.look(getRandomInt(8), true);
+            return true;
+        }
         return false;
     }
 
