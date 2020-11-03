@@ -1,3 +1,0 @@
-create Goblin 10000
-show
-quit

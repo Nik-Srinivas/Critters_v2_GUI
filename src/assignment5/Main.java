@@ -83,7 +83,7 @@ public class Main extends Application {
     public static ByteArrayOutputStream testOutputString;
 
     private Scene scene;
-    private Boolean loopValue = true;
+    public Boolean loopValue = true;
     private String[] classNames = new String[100];
     private int numberOfFiles = 0;
     private int numberOfCritters = 0;
@@ -133,14 +133,33 @@ public class Main extends Application {
             this.show();
         }
     }
+    static BorderPane statPane = new BorderPane();
+
+    public class StatStage extends Stage {
+
+        StatStage(){
+
+            scene = new Scene(statPane);
+
+            this.setScene(scene);
+            this.show();
+        }
+    }
 
 
-    @Override
+
+        @Override
     public void start(Stage primaryStage)  {
+        // Controller
+        primaryStage.setMaxHeight(600);
+        primaryStage.setMaxWidth(600);
 
-
-        // Stage Initialization
+        // World Stage
         Stage worldStage = new SecondStage();
+        worldStage.setMaxWidth(Params.WORLD_WIDTH * 40);
+        worldStage.setMaxHeight(Params.WORLD_HEIGHT * 41);
+
+
         Critter.displayWorld(gridz);
         worldStage.setTitle("World of Critters");
 
@@ -197,8 +216,6 @@ public class Main extends Application {
         final ComboBox<String> listOfCritters = new ComboBox<>(differentCritters);
         listOfCritters.setValue(critterNames[0]);
 
-        // Create Stats window
-        //ThirdStage statistics = new ThirdStage();
 
         // TextFields for integer input
         TextField number_critters = new TextField();
@@ -279,8 +296,7 @@ public class Main extends Application {
                         //statistics.refreshStats();
                         step_error.setText("");
                         Critter.displayWorld(gridz);
-                        String stats = Critter.runStats(Critter.population);
-                        System.out.println(stats);
+
                     }
                 } catch (NumberFormatException e1) {
                     step_error.setText("Please enter a positive integer!");
@@ -338,6 +354,8 @@ public class Main extends Application {
         center.add(step, 1, row + 6);
         center.add(run, 0, row + 7);
 
+
+
         center.add(quit, 1, row + 7);
 //        top.getChildren().addAll(seed);
 //        //top.getChildren().addAll(listOfCritters, number_critters, make);
@@ -363,6 +381,7 @@ public class Main extends Application {
         primaryStage.setScene(myScene);
         primaryStage.show();
         Critter.displayWorld(new GridPane());
+
 
 
 
