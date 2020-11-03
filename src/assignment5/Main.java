@@ -306,23 +306,27 @@ public class Main extends Application {
         right.setPadding(new Insets(15, 12, 15, 12));
 
         int row = 0;
-        top.getChildren().addAll(listOfCritters, number_critters, make);
-        bottom.getChildren().addAll(quit);
-        left.getChildren().addAll(seed);
         center.setPadding(new Insets(15, 12, 15, 12));
-        center.add(new Label("Make Critters:"), 0, row);
-        center.add(listOfCritters, 0, row + 1);
-        center.add(number_critters, 1, row + 1);
-        center.add(make, 2, row + 1);
-        center.add(new Label("Critter Motion Handling:"), 0, row + 3);
-        center.add(step_number, 0, row + 4);
-        center.add(step, 1, row + 4);
-        center.add(animate, 0, row + 5);
-        // Add a slider if we can
-        center.add(new Label("Set Seed:"), 0, row + 7);
-        center.add(seed_number, 0, row + 8);
-        center.add(seed, 1, row + 8);
-        center.add(quit, 2, row + 11);
+        center.add(new Label("Set Seed:"), 0, row+1);
+        center.add(seed_number, 0, row+2);
+        center.add(seed, 1, row+2 );
+        center.add(new Label("Make Critters:"), 0, row+3);
+        center.add(listOfCritters, 0, row + 4);
+        center.add(number_critters, 1, row + 4);
+        center.add(make, 2, row + 4);
+        center.add(new Label("Critter Motion Handling:"), 0, row + 5);
+        center.add(step_number, 0, row + 6);
+        center.add(step, 1, row + 6);
+        center.add(animate, 0, row + 7);
+
+        center.add(quit, 1, row + 7);
+//        top.getChildren().addAll(seed);
+//        //top.getChildren().addAll(listOfCritters, number_critters, make);
+//        bottom.getChildren().addAll(quit);
+//        left.getChildren().addAll(seed);
+
+
+
 
         // Error messages
         center.add(make_error, 3, row + 1);
