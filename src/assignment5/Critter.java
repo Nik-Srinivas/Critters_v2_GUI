@@ -15,7 +15,6 @@
 package assignment5;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
 
 // JavaFX Packages for Displaying World
 
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 
 /* 
@@ -132,7 +130,6 @@ public abstract class Critter {
         }
 
         pane.getChildren().clear();
-        //paintGridLines(pane);
         pane.setPrefSize(Main.W, Main.H);
 
         for (int y = 0; y < Main.Y_TILES; y++) {
@@ -150,27 +147,6 @@ public abstract class Critter {
             }
         }
     }
-
-    /*
-     * Paint the grid lines in orange.  The purpose is two-fold -- to indicate boundaries of
-     * icons, and as place-holders for empty cells.  Without placeholders, grid may not display properly.
-     */
-//    private static void paintGridLines(GridPane grid) {
-//        if (Params.WORLD_HEIGHT >= Params.WORLD_WIDTH) {
-//            size = 575/Params.WORLD_HEIGHT;
-//        }
-//        else {
-//            size = 575/Params.WORLD_WIDTH;
-//        }
-//        for (int i = 0; i < Params.WORLD_WIDTH; i++) { // columns
-//            for (int j = 0; j < Params.WORLD_HEIGHT; j++) { // rows
-//                Shape s = new Rectangle(size, size);
-//                s.setFill(null);
-//                s.setStroke(Color.ORANGE);
-//                grid.add(s, i, j);
-//            }
-//        }
-//    }
 
     /*
      * Returns a square or a circle depending on the shapeIndex parameter
@@ -400,8 +376,6 @@ public abstract class Critter {
                             }
                         }
                     }
-//                    if (c1.getEnergy() < 0) population.remove(c1);
-//                    else if (c2.getEnergy() < 0) population.remove(c2);
                 }
             }
         }
